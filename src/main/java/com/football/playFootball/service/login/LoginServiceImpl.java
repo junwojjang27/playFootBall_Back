@@ -5,6 +5,7 @@ import com.football.playFootball.domain.login.UserInfoRepository;
 import com.football.playFootball.dto.login.LoginRegisterDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,16 +16,37 @@ import java.time.LocalDateTime;
 public class LoginServiceImpl {
 
     private final UserInfoRepository userInfoRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public boolean existsById(String userId) {
         System.out.println("==== TEST QUERY START ====");
         return userInfoRepository.existsByUserId(userId);
     }
 
+    public UserInfo login(String userId, String rawPassword) {
+        // 1. 사용자 조회
+        UserInfo user = userInfoRepository.findByUserId(userId);
+        if (user == null) {
+            return null; // 사용자 없음
+        }
+
+        // 2. 비밀번호 일치 여부 확인
+        boolean isMatch = passwordEncoder.matches(rawPassword, user.getPasswd());
+        if(isMatch) {
+            return user;
+        } else {
+            return null;
+        }
+    }
+
     public void saveUser(LoginRegisterDto dto) {
         UserInfo user = new UserInfo();
         user.setUserId(dto.getUserId());
-        user.setPasswd(dto.getPasswd());
+
+        // ✅ 평문 비밀번호 → 암호화 후 저장
+        String encryptedPassword = passwordEncoder.encode(dto.getPasswd());
+        user.setPasswd(encryptedPassword);
+
         user.setUserNm(dto.getUserNm());
         user.setNickNm(dto.getNickNm());
         user.setEmail(dto.getEmail());

@@ -1,6 +1,6 @@
 # src/main/resources/application.yml
 server:
-  port: 8088
+  port: 8068
 
 spring:
   application:
