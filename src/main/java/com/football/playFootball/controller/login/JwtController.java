@@ -29,4 +29,16 @@ public class JwtController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("invalid");
         }
     }
+
+    @GetMapping("/refresh")
+    public ResponseEntity<String> refreshToken(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        if (!jwtUtil.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("invalid");
+        }
+        String userId = jwtUtil.extractUserId(token);
+        String nickNm = jwtUtil.extractNickNm(token);
+        String newToken = jwtUtil.generateToken(userId, nickNm);
+        return ResponseEntity.ok(newToken);
+    }
 }

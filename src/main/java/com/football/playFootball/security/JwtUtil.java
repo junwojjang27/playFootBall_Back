@@ -12,7 +12,7 @@ public class JwtUtil {
 
     private static final String SECRET = "ThisIsMySuperSecretKeyForJwtToken1234567890"; // 32자 이상
 //    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 1; // 1시간
-    private static final long EXPIRATION_TIME = 5000; // 5초
+    private static final long EXPIRATION_TIME = 10000; // 10초
 
     private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
