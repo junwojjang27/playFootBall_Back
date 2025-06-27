@@ -23,6 +23,11 @@ public class LoginServiceImpl {
         return userInfoRepository.existsByUserId(userId);
     }
 
+    public boolean existsByNickNm(String nickNm) {
+        System.out.println("==== TEST QUERY START ====");
+        return userInfoRepository.existsByNickNm(nickNm);
+    }
+
     public UserInfo login(String userId, String rawPassword) {
         // 1. 사용자 조회
         UserInfo user = userInfoRepository.findByUserId(userId);

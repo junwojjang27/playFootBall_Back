@@ -61,4 +61,22 @@ public class LoginController {
         return ResponseEntity.ok("회원가입 완료!");
     }
 
+    @PostMapping("/checkDuplicateId")
+    public ResponseEntity<String> checkDuplicateId(@RequestBody LoginRegisterDto dto) {
+        if (loginService.existsById(dto.getUserId())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("중복된 아이디입니다.");
+        } else {
+            return ResponseEntity.ok("사용가능한 아이디입니다!");
+        }
+    }
+
+    @PostMapping("/checkDuplicateNickNm")
+    public ResponseEntity<String> checkDuplicateNickNm(@RequestBody LoginRegisterDto dto) {
+        if (loginService.existsByNickNm(dto.getNickNm())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("중복된 닉네임입니다.");
+        } else {
+            return ResponseEntity.ok("사용가능한 닉네임입니다!");
+        }
+    }
+
 }
